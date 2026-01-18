@@ -1,0 +1,6 @@
+@MT.Beans.API_HostAddress = http://localhost:5034
+
+GET {{MT.Beans.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

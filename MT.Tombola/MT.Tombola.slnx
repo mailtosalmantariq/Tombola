@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="ReadMe.txt" />
+  </Folder>
+  <Project Path="MT.Beans.Api.Data/MT.Beans.Api.Data.csproj" DisplayName="MT.Beans.API.Data" Id="9b755df3-1ae4-4ef5-9ffc-55ae85fd72e4" />
+  <Project Path="MT.Beans.API.Service.Tests/MT.Beans.API.Service.Tests.csproj" Id="5876acf3-8e6e-4625-9186-78478c47e5ab" />
+  <Project Path="MT.Beans.API.Service/MT.Beans.API.Service.csproj" Id="fac41742-5d24-417e-a239-219a15e33fe8" />
+  <Project Path="MT.Beans.API.Tests/MT.Beans.API.Tests.csproj" Id="33721249-7c8c-4f90-8265-b6664080c8c9" />
+  <Project Path="MT.Beans.API/MT.Beans.API.csproj" Id="40ac3e21-485f-42b0-b8b4-a84d8bd99fe5" />
+  <Project Path="MT.Beans.App.Service.Tests/MT.Beans.App.Service.Tests.csproj" Id="729886b8-ec4b-4f2f-af76-ad3a34e936da" DisplayName="MT.Beans.APP.Service.Tests" />
+  <Project Path="MT.Beans.App.Service/MT.Beans.App.Service.csproj" Id="9add4bd0-a057-4092-95a3-d69c846ea8a2" DisplayName="MT.Beans.APP.Service" />
+  <Project Path="MT.Beans.App/MT.Beans.App.csproj" Id="4c96038e-4a7a-4846-b9c3-b7c99b3e9372" DisplayName="MT.Beans.APP" />
+  <Project Path="MT.Beans.Middleware/MT.Beans.Middleware.csproj" Id="9eed8147-45e5-46e3-8762-6507a3359f49" />
+</Solution>

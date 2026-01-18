@@ -1,0 +1,17 @@
+<div class="card h-100" @onclick="() => OnSelected.InvokeAsync(Bean)" style="cursor:pointer">
+    <img src="@Bean.ImageUrl"
+         class="card-img-top"
+         alt="@Bean.Name"
+         style="height: 200px; object-fit: cover;" />
+
+    <div class="card-body">
+        <h5 class="card-title">@Bean.Name</h5>
+        <p class="card-text">@Bean.Country • @Bean.Colour</p>
+        <p class="fw-bold">@Bean.Cost.ToString("C", new System.Globalization.CultureInfo("en-GB"))</p>
+    </div>
+</div>
+
+@code {
+    [Parameter] public BeanDto Bean { get; set; } = default!;
+    [Parameter] public EventCallback<BeanDto> OnSelected { get; set; }
+}

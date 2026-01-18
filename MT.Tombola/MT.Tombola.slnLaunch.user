@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "MT.Beans.App\\MT.Beans.APP.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "MT.Beans.API\\MT.Beans.API.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

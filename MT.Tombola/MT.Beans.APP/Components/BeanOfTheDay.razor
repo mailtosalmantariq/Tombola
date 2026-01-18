@@ -1,0 +1,38 @@
+﻿@using MT.Beans.App.Service.BeansApiClient
+@inject IBeansApiClientService<BeanDto> BeansApiClientService
+@inject NavigationManager Nav
+
+@if (botd is null)
+{
+    <p>Loading Bean of the Day...</p>
+}
+else
+{
+    <div class="alert alert-warning d-flex justify-content-between align-items-center">
+        <div>
+            <strong>Bean of the Day:</strong> @botd.Name (@botd.Country)
+        </div>
+
+        <button class="btn btn-sm btn-outline-dark"
+                @onclick="GoToDetails">
+            View details
+        </button>
+    </div>
+}
+
+@code {
+    private BeanDto? botd;
+
+    protected override async Task OnInitializedAsync()
+    {
+        botd = await BeansApiClientService.GetBeanOfTheDayAsync();
+    }
+
+    private void GoToDetails()
+    {
+        if (!string.IsNullOrWhiteSpace(botd?.ExternalId))
+        {
+            Nav.NavigateTo($"/beans/{botd.ExternalId}");
+        }
+    }
+}

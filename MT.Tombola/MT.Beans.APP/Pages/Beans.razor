@@ -1,0 +1,53 @@
+﻿@page "/"
+@using MT.Beans.App.Service.BeansApiClient
+@using MT.Beans.App.Components
+@inject IBeansApiClientService<BeanDto> BeansApiClientService
+
+<h3 style="color: #4CAF50;">All The Beans</h3>
+
+<input @bind="searchTerm" placeholder="Search by name, country, colour..." class="form-control mb-3" />
+
+@if (beans is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-3">
+        @foreach (var bean in FilteredBeans)
+        {
+            <div class="col">
+                <BeanCard Bean="bean" OnSelected="ShowDetails" />
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<BeanDto>? beans;
+    private string searchTerm = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        beans = await BeansApiClientService.GetBeansAsync();
+    }
+
+    private List<BeanDto> FilteredBeans =>
+     string.IsNullOrWhiteSpace(searchTerm)
+         ? (beans ?? Enumerable.Empty<BeanDto>()).ToList()
+         : beans!
+             .Where(b =>
+                 (b.Name?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                 (b.Country?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                 (b.Colour?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false))
+             .ToList();
+
+
+    private void ShowDetails(BeanDto bean)
+    {
+        // navigate to details page
+        navManager.NavigateTo($"/beans/{bean.ExternalId}");
+    }
+
+    [Inject] NavigationManager navManager { get; set; } = default!;
+}

@@ -1,0 +1,73 @@
+﻿@page "/order"
+@page "/order/{ExternalId}"
+@using MT.Beans.App.Service.BeansApiClient
+@using System.ComponentModel.DataAnnotations
+@inject IBeansApiClientService<BeanDto> BeansApiClientService
+
+<h3>Order Beans</h3>
+
+<EditForm Model="order" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Bean</label>
+        <InputSelect class="form-select" @bind-Value="order.BeanExternalId">
+            <option value="">-- Select a bean --</option>
+            @if (beans != null)
+            {
+                @foreach (var b in beans)
+                {
+                    <option value="@b.ExternalId">@b.Name (@b.Country)</option>
+                }
+            }
+        </InputSelect>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Quantity (bags)</label>
+        <InputNumber class="form-control" @bind-Value="order.Quantity" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Customer email</label>
+        <InputText class="form-control" @bind-Value="order.Email" />
+    </div>
+
+    <button class="btn btn-success" type="submit">Place order</button>
+</EditForm>
+
+@if (submitted)
+{
+    <div class="alert alert-success mt-3">
+        Order placed (mock). In a real app this would call an API.
+    </div>
+}
+
+@code {
+    [Parameter] public string? ExternalId { get; set; }
+
+    private List<BeanDto>? beans;
+    private OrderModel order = new();
+    private bool submitted;
+
+    protected override async Task OnInitializedAsync()
+    {
+        beans = await BeansApiClientService.GetBeansAsync();
+        if (!string.IsNullOrWhiteSpace(ExternalId))
+            order.BeanExternalId = ExternalId;
+    }
+
+    private void Submit()
+    {
+        // For Scenario 1, you can just simulate success.
+        submitted = true;
+    }
+
+    public class OrderModel
+    {
+        [Required] public string? BeanExternalId { get; set; }
+        [Range(1, 100)] public int Quantity { get; set; } = 1;
+        [Required, EmailAddress] public string? Email { get; set; }
+    }
+}

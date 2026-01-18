@@ -1,0 +1,40 @@
+﻿@page "/beans/{ExternalId}"
+@using MT.Beans.App.Service.BeansApiClient
+@using System.Globalization
+@inject IBeansApiClientService<BeanDto> BeansApiClientService
+
+@if (bean is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@bean.ImageUrl" class="img-fluid rounded" />
+        </div>
+        <div class="col-md-8">
+            <h2>@bean.Name</h2>
+            <p class="text-muted">@bean.Country • @bean.Colour</p>
+            <p>@bean.Description</p>
+            <p class="fw-bold">@bean.Cost.ToString("C", gbCulture)</p>
+            <button class="btn btn-primary" @onclick="GoToOrder">Order this bean</button>
+        </div>
+    </div>
+}
+
+@code {
+    private static readonly CultureInfo gbCulture = new("en-GB");
+    
+    [Parameter] public string ExternalId { get; set; } = string.Empty;
+    private BeanDto? bean;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        bean = await BeansApiClientService.GetBeanAsync(ExternalId);
+    }
+
+    [Inject] NavigationManager Nav { get; set; } = default!;
+
+    void GoToOrder() => Nav.NavigateTo($"/order/{ExternalId}");
+}
