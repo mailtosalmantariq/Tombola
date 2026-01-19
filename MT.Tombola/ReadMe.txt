@@ -19,8 +19,8 @@ To Create SQL Database:
 	3. Open a package manager console in Visual Studio.
 	4. Run the command: `Add-Migration InitialCreate` and then `Update-Database` and default project must be MT.Beans.API. Else you can run the following command in the package manager console:
 	   `Update-Database -Project MT.Beans.API -StartupProject MT.Beans.API`
-	4. Then open SQL Server Management Studio and check whether the tables exist.
-	5. Run the MT.Beans.API as a single project to insert the Json data into SQL tables.
+	5. Then open SQL Server Management Studio and check whether the tables exist.
+	6. Run the MT.Beans.API as a single project to insert the Json data into SQL tables.
 
 
 To run the application:
