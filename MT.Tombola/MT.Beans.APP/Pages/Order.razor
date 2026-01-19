@@ -10,9 +10,12 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
+    <!-- Bean selection -->
     <div class="mb-3">
         <label class="form-label">Bean</label>
-        <InputSelect class="form-select" @bind-Value="order.BeanExternalId">
+        <InputSelect class="form-select"
+                     @bind-Value="order.BeanExternalId"
+                     @onchange="OnBeanChanged">
             <option value="">-- Select a bean --</option>
             @if (beans != null)
             {
@@ -24,14 +27,26 @@
         </InputSelect>
     </div>
 
+    <!-- Quantity -->
     <div class="mb-3">
         <label class="form-label">Quantity (bags)</label>
-        <InputNumber class="form-control" @bind-Value="order.Quantity" />
+        <InputNumber class="form-control"
+                     @bind-Value="order.Quantity"
+                     @oninput="OnQuantityChanged" />
     </div>
 
+    <!-- Email -->
     <div class="mb-3">
         <label class="form-label">Customer email</label>
         <InputText class="form-control" @bind-Value="order.Email" />
+    </div>
+
+    <!-- Total Price -->
+    <div class="mb-3">
+        <label class="form-label fw-bold">Total Price</label>
+        <div class="form-control bg-light">
+            @totalPrice.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-GB"))
+        </div>
     </div>
 
     <button class="btn btn-success" type="submit">Place order</button>
@@ -50,18 +65,50 @@
     private List<BeanDto>? beans;
     private OrderModel order = new();
     private bool submitted;
+    private decimal totalPrice;
 
     protected override async Task OnInitializedAsync()
     {
         beans = await BeansApiClientService.GetBeansAsync();
+
         if (!string.IsNullOrWhiteSpace(ExternalId))
             order.BeanExternalId = ExternalId;
+
+        RecalculateTotal();
     }
 
     private void Submit()
     {
-        // For Scenario 1, you can just simulate success.
         submitted = true;
+    }
+
+    private void OnBeanChanged(ChangeEventArgs e)
+    {
+        order.BeanExternalId = e.Value?.ToString();
+        RecalculateTotal();
+    }
+
+    private void OnQuantityChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var qty))
+            order.Quantity = qty;
+
+        RecalculateTotal();
+    }
+
+    private void RecalculateTotal()
+    {
+        if (beans == null || string.IsNullOrWhiteSpace(order.BeanExternalId))
+        {
+            totalPrice = 0;
+            return;
+        }
+
+        var selected = beans.FirstOrDefault(b => b.ExternalId == order.BeanExternalId);
+        if (selected != null)
+            totalPrice = selected.Cost * order.Quantity;
+        else
+            totalPrice = 0;
     }
 
     public class OrderModel
